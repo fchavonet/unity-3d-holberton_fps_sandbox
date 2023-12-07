@@ -415,6 +415,7 @@ MonoBehaviour:
   speed: 10
   gravity: -10
   jumpHeight: 2
+  crouchHeight: 0
   groundCheck: {fileID: 1689652812}
   groundLayer:
     serializedVersion: 2
@@ -597,6 +598,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 267064147}
   mouseSensitivity: 100
+  gamepadSensitivity: 150
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
