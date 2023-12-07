@@ -9,11 +9,15 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController characterController;
 
     [Space(10)]
+    // Reference to the player's body GameObject 
+    public GameObject playerBody;
+
+    [Space(10)]
     // Movement speed, gravity, and jump height variables
     public float speed = 10f;
     public float gravity = -15f;
     public float jumpHeight = 2;
-    public float crouchHeight = 0.25f;
+    public float crouchHeight = -1f;
 
     [Space(10)]
     // Ground check parameters
@@ -24,17 +28,19 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 move;
     // Vector to store player velocity
     private Vector3 velocity;
+    // Vector to store local position of the player's body
+    private Vector3 normalLocalPosition;
 
     // Initial height of the player when not crouching
     private float normalHeight;
 
-    // Boolean checker
+    // Boolean checkers
     private bool isGrounded = true;
     private bool isRunning = false;
     private bool isJumping = false;
     private bool isCrouching = false;
 
-    // Input actions for movement, run, and jump
+    // Input actions for movement, run, jump and crouch
     InputAction movement;
     InputAction run;
     InputAction jump;
@@ -42,8 +48,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        // Store the normal height of the character controller when not crouching
-        normalHeight = characterController.height;
+        // Store the initial local position of the player's body
+        normalLocalPosition = playerBody.transform.localPosition;
 
         // Set up movement input with keyboard and gamepad bindings
         movement = new InputAction("PlayerMovement", binding: "<Gamepad>/leftStick");
@@ -155,11 +161,16 @@ public class PlayerMovement : MonoBehaviour
         // Adjust the character controller height based on crouch state
         if (isCrouching)
         {
-            characterController.height = crouchHeight;
+            // Calculate the new local Y position for the player's body when crouching
+            float newLocalY = normalLocalPosition.y - (normalLocalPosition.y - crouchHeight);
+
+            // Set the new local position for the player's body
+            playerBody.transform.localPosition = new Vector3(normalLocalPosition.x, newLocalY, normalLocalPosition.z);
         }
         else
         {
-            characterController.height = normalHeight;
+            // Reset the local position for the player's body to its normal position
+            playerBody.transform.localPosition = normalLocalPosition;
         }
     }
 }
