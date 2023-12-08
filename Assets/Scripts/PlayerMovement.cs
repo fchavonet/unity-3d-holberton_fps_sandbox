@@ -84,7 +84,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-
         // Read horizontal and vertical input values
         float x = movement.ReadValue<Vector2>().x;
         float z = movement.ReadValue<Vector2>().y;

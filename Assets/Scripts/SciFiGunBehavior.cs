@@ -15,18 +15,18 @@ public class SciFiGunBehavior : MonoBehaviour
     public GameObject impactGlass;
 
     [Space(10)]
-    //
+    // Bullet parameters
     public float bulletRange = 100f;
     public float bulletForce = 150f;
     public int bulletRate = 5;
 
     [Space(10)]
-    //
+    // Ball objects
     public GameObject ballPoint;
     public GameObject ballPrefab;
 
     [Space(10)]
-    //
+    // Ball parameters
     public float ballForce = 1500f;
     public int ballRate = 5;
 
@@ -45,11 +45,11 @@ public class SciFiGunBehavior : MonoBehaviour
 
     void Start()
     {
-        // Set up shoot input with mouse and gamepad bindings
+        // Set up shoot bullet input with mouse and gamepad bindings
         shootBullet = new InputAction("ShootBullet", binding: "<mouse>/leftButton");
         shootBullet.AddBinding("<Gamepad>/rightTrigger");
 
-        //
+        // Set up shoot ball input with mouse and gamepad bindings
         shootBall = new InputAction("ShootBall", binding: "<mouse>/rightButton");
         shootBall.AddBinding("<Gamepad>/leftTrigger");
 
@@ -66,14 +66,14 @@ public class SciFiGunBehavior : MonoBehaviour
         // Fire the gun if shooting and enough time has passed since the last shot
         if(isShootingBullet && Time.time >= nextTimeToFireBullet)
         {
-            nextTimeToFireBullet = Time.time + 1f / ballRate;
+            nextTimeToFireBullet = Time.time + 1f / bulletRate;
             FireBullet();
         }
 
         // Check if the shooting ball input is triggered
         isShootingBall = shootBall.triggered;
 
-        //
+        // Fire the ball if shooting and enough time has passed since the last shot
         if (isShootingBall && Time.time >= nextTimeToFireBall)
         {
             nextTimeToFireBall = Time.time +1f / ballRate;
@@ -83,10 +83,13 @@ public class SciFiGunBehavior : MonoBehaviour
 
     private void FireBullet()
     {
-        //
+        // Play bullet shooting sound
+        AudioManager.instance.Play("ShootBullet");
+
+        // Raycast to detect hits along the player's camera forward direction
         RaycastHit hit;
 
-        //
+        // Play muzzle flash particle effect
         muzzleFlush.Play();
 
         // Cast a ray from the player's camera to detect hits
@@ -106,6 +109,7 @@ public class SciFiGunBehavior : MonoBehaviour
                 // Check if the impact layer is suitable for impact effects
                 if (impactLayer == LayerMask.NameToLayer("Impact") || impactLayer == LayerMask.NameToLayer("Ground"))
                 {
+                    // Instantiate impact effect with rotation based on hit normal
                     Quaternion impactRotation = Quaternion.LookRotation(hit.normal);
                     GameObject impact = Instantiate(impactEffect, hit.point, impactRotation);
                     impact.transform.parent = hit.transform;
@@ -114,9 +118,10 @@ public class SciFiGunBehavior : MonoBehaviour
                     Destroy(impact, 10);
                 }
 
-                //
+                // Check if the impact layer corresponds to glass surfaces
                 if (impactLayer == LayerMask.NameToLayer("Glass"))
                 {
+                    // Instantiate glass impact effect with rotation adjustment
                     Quaternion impactRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
                     GameObject impact = Instantiate(impactGlass, hit.point + (hit.normal * .01f), impactRotation);
                     impact.transform.parent = hit.transform;
@@ -130,11 +135,14 @@ public class SciFiGunBehavior : MonoBehaviour
 
     private void FireBall()
     {
-        //
+        // Play ball shooting sound
+        AudioManager.instance.Play("ShootBall");
+
+        // Instantiate and shoot the ball
         GameObject ball = Instantiate(ballPrefab, ballPoint.transform.position, transform.rotation);
         ball.GetComponent<Rigidbody>().AddForce(transform.forward * ballForce);
 
-        //
+        // Destroy the ball after a certain time
         Destroy(ball, 30);
     }
 }
