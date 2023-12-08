@@ -138,11 +138,30 @@ public class SciFiGunBehavior : MonoBehaviour
         // Play ball shooting sound
         AudioManager.instance.Play("ShootBall");
 
-        // Instantiate and shoot the ball
-        GameObject ball = Instantiate(ballPrefab, ballPoint.transform.position, transform.rotation);
-        ball.GetComponent<Rigidbody>().AddForce(transform.forward * ballForce);
+        // Raycast to detect hits along the player's camera forward direction
+        RaycastHit hit;
 
-        // Destroy the ball after a certain time
-        Destroy(ball, 30);
+        // Cast a ray from the player's camera to detect hits
+        if (Physics.Raycast(PlayerCamera.position, PlayerCamera.forward, out hit, bulletRange))
+        {
+            // Calculate the direction towards the hit point
+            Vector3 shootDirection = (hit.point - ballPoint.transform.position).normalized;
+
+            // Instantiate and shoot the ball towards the hit point
+            GameObject ball = Instantiate(ballPrefab, ballPoint.transform.position, Quaternion.LookRotation(shootDirection));
+            ball.GetComponent<Rigidbody>().AddForce(shootDirection * ballForce);
+
+            // Destroy the ball after a certain time
+            Destroy(ball, 30);
+        }
+        else
+        {
+            // If no hit, shoot the ball straight ahead
+            GameObject ball = Instantiate(ballPrefab, ballPoint.transform.position, transform.rotation);
+            ball.GetComponent<Rigidbody>().AddForce(transform.forward * ballForce);
+
+            // Destroy the ball after a certain time
+            Destroy(ball, 30);
+        }
     }
 }
