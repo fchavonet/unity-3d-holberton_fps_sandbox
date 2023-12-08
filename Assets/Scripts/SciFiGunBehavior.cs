@@ -12,6 +12,7 @@ public class SciFiGunBehavior : MonoBehaviour
     // Particle system and impact effect objects
     public ParticleSystem muzzleFlush;
     public GameObject impactEffect;
+    public GameObject impactGlass;
 
     [Space(10)]
     //
@@ -110,7 +111,18 @@ public class SciFiGunBehavior : MonoBehaviour
                     impact.transform.parent = hit.transform;
 
                     // Destroy the impact effect after a certain time
-                    Destroy(impact, 60);
+                    Destroy(impact, 10);
+                }
+
+                //
+                if (impactLayer == LayerMask.NameToLayer("Glass"))
+                {
+                    Quaternion impactRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                    GameObject impact = Instantiate(impactGlass, hit.point + (hit.normal * .01f), impactRotation);
+                    impact.transform.parent = hit.transform;
+
+                    // Destroy the impact effect after a certain time
+                    Destroy(impact, 10);
                 }
             }
         }
