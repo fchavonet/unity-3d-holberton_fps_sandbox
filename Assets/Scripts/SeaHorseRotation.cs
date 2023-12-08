@@ -5,7 +5,7 @@ using UnityEngine;
 public class SeaHorseRotation : MonoBehaviour
 {
     // Rotation speed of the SeaHorse around the Y-axis
-    public float rotationSpeed = 5f;
+    public float rotationSpeed = 15f;
 
     void Update()
     {
