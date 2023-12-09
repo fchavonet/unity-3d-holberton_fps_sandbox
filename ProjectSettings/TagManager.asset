@@ -11,12 +11,12 @@ TagManager:
   - Ground
   - Water
   - UI
-  - Glass
+  - Player
+  - Camera
   - Impact
-  - 
-  - 
-  - 
-  - 
+  - Glass
+  - PoolBalls
+  - PoolHoles
   - 
   - 
   - 

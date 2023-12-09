@@ -17,7 +17,7 @@ public class SciFiGunBehavior : MonoBehaviour
     [Space(10)]
     // Bullet parameters
     public float bulletRange = 100f;
-    public float bulletForce = 150f;
+    public float bulletForce = 1500f;
     public int bulletRate = 5;
 
     [Space(10)]
