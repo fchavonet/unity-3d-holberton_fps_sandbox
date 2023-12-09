@@ -17,7 +17,7 @@ public class SciFiGunBehavior : MonoBehaviour
     [Space(10)]
     // Bullet parameters
     public float bulletRange = 100f;
-    public float bulletForce = 1500f;
+    public float bulletForce = 200f;
     public int bulletRate = 5;
 
     [Space(10)]
@@ -27,7 +27,7 @@ public class SciFiGunBehavior : MonoBehaviour
 
     [Space(10)]
     // Ball parameters
-    public float ballForce = 1500f;
+    public float ballForce = 2000f;
     public int ballRate = 5;
 
     // Variables to control the firing rate and track impact layer
