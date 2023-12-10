@@ -5,6 +5,11 @@ using UnityEngine.InputSystem;
 
 public class SciFiGunBehavior : MonoBehaviour
 {
+    [Space(10)]
+    // Reference to the Animator
+    public Animator animator;
+
+    [Space(10)]
     // Reference to the player's camera
     public Transform PlayerCamera;
 
@@ -63,6 +68,9 @@ public class SciFiGunBehavior : MonoBehaviour
         // Check if the shooting bullet input is triggered
         isShootingBullet = shootBullet.ReadValue<float>() == 1;
 
+        // Update the isShooting parameter in the Animator
+        animator.SetBool("isShootingBullet", isShootingBullet);
+
         // Fire the gun if shooting and enough time has passed since the last shot
         if(isShootingBullet && Time.time >= nextTimeToFireBullet)
         {
@@ -72,6 +80,9 @@ public class SciFiGunBehavior : MonoBehaviour
 
         // Check if the shooting ball input is triggered
         isShootingBall = shootBall.triggered;
+
+        //isShootingBall = shootBall.ReadValue<float>() == 1;
+        animator.SetBool("isShootingBall", isShootingBall);
 
         // Fire the ball if shooting and enough time has passed since the last shot
         if (isShootingBall && Time.time >= nextTimeToFireBall)

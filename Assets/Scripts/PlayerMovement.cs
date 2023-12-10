@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    // Reference to the Animator
+    public Animator animator;
+
     // Reference to the CharacterController component
     public CharacterController characterController;
 
@@ -14,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Space(10)]
     // Movement speed, gravity, and jump height variables
-    public float speed = 10f;
+    public float speed = 8f;
     public float gravity = -15f;
     public float jumpHeight = 2;
     public float crouchHeight = -1f;
@@ -88,6 +91,9 @@ public class PlayerMovement : MonoBehaviour
         float x = movement.ReadValue<Vector2>().x;
         float z = movement.ReadValue<Vector2>().y;
 
+        // Update the speed parameter in the Animator
+        animator.SetFloat("speed", Mathf.Abs(x) + Mathf.Abs(z));
+
         // Calculate the movement vector
         move = transform.right * x + transform.forward * z;
 
@@ -109,14 +115,17 @@ public class PlayerMovement : MonoBehaviour
             // Check if the player is running
             isRunning = Mathf.Approximately(run.ReadValue<float>(), 1);
 
+            // Update the isRunning parameter in the Animator
+            animator.SetBool("isRunning", isRunning);
+
             // Adjust player speed based on running
             if (isRunning)
             {
-                speed = 15f;
+                speed = 10f;
             }
             else
             {
-                speed = 10f;
+                speed = 8f;
             }
 
             // Check if the player is jumping
